@@ -1,7 +1,7 @@
 const Sequelize = require('sequelize')
 const db = require('../db')
 
-const Ingredient = db.define('ingredient', {
+const Item = db.define('item', {
   name: {
     type: Sequelize.STRING,
     allowNull: false,
@@ -23,4 +23,4 @@ const Ingredient = db.define('ingredient', {
   }
 })
 
-module.exports = Ingredient
+module.exports = Item
