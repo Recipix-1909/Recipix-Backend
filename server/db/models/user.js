@@ -48,6 +48,7 @@ module.exports = User
 /**
  * instanceMethods
  */
+
 User.prototype.correctPassword = function(candidatePwd) {
   return User.encryptPassword(candidatePwd, this.salt()) === this.password()
 }
@@ -55,6 +56,16 @@ User.prototype.correctPassword = function(candidatePwd) {
 /**
  * classMethods
  */
+
+User.getFridgeId = function(id) {
+  return User.findOne({
+    where: {
+      id: id
+    },
+    attribute: ['fridgeId']
+  })
+}
+
 User.generateSalt = function() {
   return crypto.randomBytes(16).toString('base64')
 }
