@@ -1,7 +1,7 @@
 const User = require('./user')
 const Item = require('./item')
 const Fridge = require('./fridge')
-const fridgeStock = require('./fridgeStock')
+const FridgeStock = require('./fridgeStock')
 const Recipe = require('./recipes')
 
 /**
@@ -21,11 +21,12 @@ User.belongsTo(Fridge)
 // Fridge.hasOne(User)
 User.belongsToMany(Recipe, {through: 'savedRecipe'})
 Recipe.belongsToMany(User, {through: 'savedRecipe'})
-Item.belongsToMany(Fridge, {through: fridgeStock})
-Fridge.belongsToMany(Item, {through: fridgeStock})
+Item.belongsToMany(Fridge, {through: FridgeStock})
+Fridge.belongsToMany(Item, {through: FridgeStock})
 
 module.exports = {
   User,
   Item,
-  Fridge
+  Fridge,
+  FridgeStock
 }
