@@ -1,18 +1,74 @@
 'use strict'
 
 const db = require('../server/db')
-const {User} = require('../server/db/models')
+const {User, Fridge, Item, FridgeStock} = require('../server/db/models')
 
 async function seed() {
   await db.sync({force: true})
   console.log('db synced!')
 
+  const fridges = await Promise.all([Fridge.create({}), Fridge.create({})])
+
   const users = await Promise.all([
-    User.create({email: 'cody@email.com', password: '123'}),
-    User.create({email: 'murphy@email.com', password: '123'})
+    User.create({
+      firstName: 'Cody',
+      lastName: 'Pug',
+      email: 'cody@email.com',
+      password: '123',
+      fridgeId: 1
+    }),
+    User.create({
+      firstName: 'Lily',
+      lastName: 'Moriarty',
+      email: 'lilybmoriarty@gmail.com',
+      password: 'password',
+      fridgeId: 2
+    })
   ])
 
-  console.log(`seeded ${users.length} users`)
+  const items = await Promise.all([
+    Item.create({
+      name: 'Broccoli',
+      serialNum: 123456
+    }),
+    Item.create({
+      name: 'Arugula',
+      serialNum: 11111
+    }),
+    Item.create({
+      name: 'Granny Smith Apple',
+      serialNum: 22222
+    }),
+    Item.create({
+      name: 'Cilantro',
+      serialNum: 33333
+    })
+  ])
+
+  const fridgeStock = await Promise.all([
+    FridgeStock.create({
+      fridgeId: 1,
+      itemId: 1
+    }),
+    FridgeStock.create({
+      fridgeId: 1,
+      itemId: 2
+    }),
+    FridgeStock.create({
+      fridgeId: 2,
+      itemId: 2
+    }),
+    FridgeStock.create({
+      fridgeId: 2,
+      itemId: 3
+    })
+  ])
+
+  console.log(
+    `seeded ${users.length} users, ${fridges.length} fridges, ${
+      items.length
+    } items, ${fridgeStock.length} items in fridge!`
+  )
   console.log(`seeded successfully`)
 }
 

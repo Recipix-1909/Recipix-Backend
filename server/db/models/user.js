@@ -3,6 +3,16 @@ const Sequelize = require('sequelize')
 const db = require('../db')
 
 const User = db.define('user', {
+  firstName: {
+    type: Sequelize.STRING,
+    allowNull: false
+  },
+
+  lastName: {
+    type: Sequelize.STRING,
+    allowNull: false
+  },
+
   email: {
     type: Sequelize.STRING,
     unique: true,
@@ -26,6 +36,10 @@ const User = db.define('user', {
   },
   googleId: {
     type: Sequelize.STRING
+  },
+
+  dietPreferences: {
+    type: Sequelize.JSON
   }
 })
 
@@ -34,6 +48,7 @@ module.exports = User
 /**
  * instanceMethods
  */
+
 User.prototype.correctPassword = function(candidatePwd) {
   return User.encryptPassword(candidatePwd, this.salt()) === this.password()
 }
@@ -41,6 +56,16 @@ User.prototype.correctPassword = function(candidatePwd) {
 /**
  * classMethods
  */
+
+User.getFridgeId = function(id) {
+  return User.findOne({
+    where: {
+      id: id
+    },
+    attribute: ['fridgeId']
+  })
+}
+
 User.generateSalt = function() {
   return crypto.randomBytes(16).toString('base64')
 }
