@@ -6,6 +6,7 @@ const db = require('../db')
 const FridgeStock = db.define('fridge_stock', {
   expirationDate: {
     type: Sequelize.DATE,
+    allowNull: true,
     validation: {
       isDate: true,
       isAfter: new Date()
