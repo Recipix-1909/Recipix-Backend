@@ -34,9 +34,27 @@ router.get('/:id', async (req, res, next) => {
 router.post('/:id/add', async (req, res, next) => {
   try {
     const user = await User.getFridgeId(req.params.id)
-    const fridge = await Fridge.findOrCreate(user.fridgeId)
-    //maybe check this again
-    const item = await item.findOrCreate(req.body)
+    const fridgeId = user.fridgeId
+
+    const item = await Item.findOrCreate({
+      where: {
+        name: req.body.name,
+        imageUrl: req.body.imageUrl,
+        serialNum: req.body.serialNum
+      }
+    })
+
+    // expiration date needs to be in ISO formate, i.e. 30.04.2020 for 4/30/20
+    const fridgeItem = await FridgeStock.findOrCreate({
+      where: {
+        itemId: item[0].id,
+        fridgeId: fridgeId,
+        expirationDate: req.body.expirationDate
+      }
+    })
+
+    // should this be 201 or 202?
+    res.status(202).send({item, fridgeItem})
   } catch (error) {
     next(error)
   }
