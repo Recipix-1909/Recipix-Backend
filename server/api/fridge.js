@@ -40,6 +40,10 @@ router.post('/:userId/', async (req, res, next) => {
     }
 
     */
+  console.log('I AM IN THE ROUTER')
+  console.log('this is REQ.BOOooOOOOOOooooDY', req.body)
+  console.log('this is REQ.PARAMAMAMAMMA', req.params)
+  console.log('this is REQ.PARMS.USERID', req.params.userId)
 
   try {
     const user = await User.getFridgeId(req.params.userId)
