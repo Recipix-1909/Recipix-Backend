@@ -26,6 +26,7 @@ router.get('/:userId', async (req, res, next) => {
         }
       ]
     })
+    console.log('THIS IS FRIDGE ITEMS!!!!!!!!!!!!', fridgeItems)
     res.send(fridgeItems)
   } catch (error) {
     next(error)
