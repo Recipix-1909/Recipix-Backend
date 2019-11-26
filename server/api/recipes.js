@@ -6,7 +6,6 @@ const router = require('express').Router()
 router.get('/:userId', async (req, res, next) => {
   try {
     const user = await User.getFridgeId(req.params.userId)
-    // get user's ingredients
     const fridgeItems = await Fridge.findOne({
       where: {
         id: user.fridgeId
