@@ -16,6 +16,7 @@ router.get('/:userId', async (req, res, next) => {
         }
       ]
     })
+
     const items = fridgeItems.items
     let searchString = ''
     items.forEach(currentItem => {
@@ -28,7 +29,7 @@ router.get('/:userId', async (req, res, next) => {
       `https://api.edamam.com/search?q=${searchString}&app_id=${edamamRecipeAPIID}&app_key=${edamamRecipeAPIKEY}&from=0&to=5`
     )
 
-    res.json(data)
+    res.send(data.hits)
 
     // make API call to retrieve recipes from user's ingredients
   } catch (error) {
