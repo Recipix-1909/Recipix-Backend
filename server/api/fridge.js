@@ -12,9 +12,9 @@ router.get('/', async (req, res, next) => {
   }
 })
 
-router.get('/:id', async (req, res, next) => {
+router.get('/:userId', async (req, res, next) => {
   try {
-    const user = await User.getFridgeId(req.params.id)
+    const user = await User.getFridgeId(req.params.userId)
 
     const fridgeItems = await Fridge.findOne({
       where: {
@@ -32,7 +32,7 @@ router.get('/:id', async (req, res, next) => {
   }
 })
 
-router.post('/:userId/', async (req, res, next) => {
+router.post('/:userId', async (req, res, next) => {
   // req.body should be like:
   /* {
       expirationDate: 01.01.1999,
@@ -40,10 +40,10 @@ router.post('/:userId/', async (req, res, next) => {
     }
 
     */
-  console.log('I AM IN THE ROUTER')
-  console.log('this is REQ.BOOooOOOOOOooooDY', req.body)
-  console.log('this is REQ.PARAMAMAMAMMA', req.params)
-  console.log('this is REQ.PARMS.USERID', req.params.userId)
+  // console.log('I AM IN THE ROUTER')
+  // console.log('this is REQ.BOOooOOOOOOooooDY', req.body)
+  // console.log('this is REQ.PARAMAMAMAMMA', req.params)
+  // console.log('this is REQ.PARMS.USERID', req.params.userId)
 
   try {
     const user = await User.getFridgeId(req.params.userId)
@@ -55,11 +55,11 @@ router.post('/:userId/', async (req, res, next) => {
     // Item.class method to see if the item exists in the database
     // Item.includes(serialNum)
 
-    console.log('this is req.body!!!!!!!!!!!!!!!', req.body)
+    // console.log('this is req.body!!!!!!!!!!!!!!!', req.body)
 
     const item = await Item.getItem(req.body.serialNum)
 
-    console.log('this is item!!!!!!!!!!!!!!!', item)
+    // console.log('this is item!!!!!!!!!!!!!!!', item)
 
     // expiration date needs to be in ISO formate, i.e. 30.04.2020 for 4/30/20
 
@@ -80,6 +80,23 @@ router.post('/:userId/', async (req, res, next) => {
     }
     // should this be 201 or 202?
     res.status(202).send({fridgeItem, item})
+  } catch (error) {
+    next(error)
+  }
+})
+
+router.delete('/:userId/:itemId', async (req, res, next) => {
+  try {
+    const user = await User.getFridgeId(req.params.userId)
+    const fridgeId = user.fridgeId
+    const itemId = req.params.itemId
+    await FridgeStock.destroy({
+      where: {
+        fridgeId: fridgeId,
+        itemId: itemId
+      }
+    })
+    res.sendStatus(204)
   } catch (error) {
     next(error)
   }
