@@ -1,6 +1,10 @@
 const axios = require('axios')
 const {Fridge, User, Item} = require('../db/models')
-const {edamamRecipeAPIKEY, edamamRecipeAPIID} = require('../../secrets')
+const {
+  edamamRecipeAPIKEY,
+  edamamRecipeAPIID,
+  spoonacularAPIKEY
+} = require('../../secrets')
 const router = require('express').Router()
 
 router.get('/:userId', async (req, res, next) => {
@@ -21,15 +25,18 @@ router.get('/:userId', async (req, res, next) => {
     let searchString = ''
     items.forEach(currentItem => {
       currentItem = currentItem.name.split(' ').join('+')
-      searchString += currentItem + '+'
+      searchString += currentItem + ',+'
     })
-    searchString = searchString.slice(0, -1)
+    searchString = searchString.slice(0, -2)
+    console.log(searchString)
 
     const {data} = await axios.get(
-      `https://api.edamam.com/search?q=${searchString}&app_id=${edamamRecipeAPIID}&app_key=${edamamRecipeAPIKEY}&from=0&to=5`
+      `https://api.spoonacular.com/recipes/findByIngredients?ingredients=${searchString}&number=5&apiKey=${spoonacularAPIKEY}`
     )
 
-    res.send(data.hits)
+    // `https://api.edamam.com/search?q=${searchString}&app_id=${edamamRecipeAPIID}&app_key=${edamamRecipeAPIKEY}&from=0&to=5`
+    console.log('DATA RETURNED FROM SPOONACULAR ====>', data)
+    res.send(data)
 
     // make API call to retrieve recipes from user's ingredients
   } catch (error) {
