@@ -6,7 +6,6 @@ const router = require('express').Router()
 router.get('/:userId', async (req, res, next) => {
   try {
     const user = await User.getFridgeId(req.params.userId)
-    // get user's ingredients
     const fridgeItems = await Fridge.findOne({
       where: {
         id: user.fridgeId
@@ -17,6 +16,7 @@ router.get('/:userId', async (req, res, next) => {
         }
       ]
     })
+
     const items = fridgeItems.items
     let searchString = ''
     items.forEach(currentItem => {
@@ -28,9 +28,8 @@ router.get('/:userId', async (req, res, next) => {
     const {data} = await axios.get(
       `https://api.edamam.com/search?q=${searchString}&app_id=${edamamRecipeAPIID}&app_key=${edamamRecipeAPIKEY}&from=0&to=5`
     )
-    // console.log(searchString)
-    // console.log(recipes)
-    res.json(data)
+
+    res.send(data.hits)
 
     // make API call to retrieve recipes from user's ingredients
   } catch (error) {
