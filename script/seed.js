@@ -42,6 +42,18 @@ async function seed() {
     Item.create({
       name: 'Cilantro',
       serialNum: 33333
+    }),
+    Item.create({
+      name: 'Chicken',
+      serialNum: 55555
+    }),
+    Item.create({
+      name: 'Beef',
+      serialNum: 121212
+    }),
+    Item.create({
+      name: 'Sriracha',
+      serialNum: 1234567
     })
   ])
 
@@ -61,6 +73,22 @@ async function seed() {
     FridgeStock.create({
       fridgeId: 2,
       itemId: 3
+    }),
+    FridgeStock.create({
+      fridgeId: 2,
+      itemId: 4
+    }),
+    FridgeStock.create({
+      fridgeId: 2,
+      itemId: 5
+    }),
+    FridgeStock.create({
+      fridgeId: 2,
+      itemId: 6
+    }),
+    FridgeStock.create({
+      fridgeId: 2,
+      itemId: 7
     })
   ])
 
