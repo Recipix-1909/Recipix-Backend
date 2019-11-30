@@ -20,10 +20,7 @@ const Item = db.define('item', {
   },
   serialNum: {
     type: Sequelize.STRING,
-    allowNull: false,
-    validate: {
-      notEmpty: true
-    }
+    allowNull: true
   }
 })
 
