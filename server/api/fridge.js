@@ -43,7 +43,7 @@ router.post('/:userId/manual', async (req, res, next) => {
       }
     })
     const item = itemId[0]
-
+    //consider addItem over findOrCreate
     let fridge = await FridgeStock.findOrCreate({
       where: {
         itemId: item.id,
