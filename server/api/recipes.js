@@ -26,6 +26,20 @@ const getRecipes = async itemsArray => {
   return data
 }
 
+router.get('/singleRecipe/:recipeId', async (req, res, next) => {
+  try {
+    console.log('this is req.params ----------------->', req.params)
+    const {data} = await axios.get(
+      `https://api.spoonacular.com/recipes/${
+        req.params.recipeId
+      }/analyzedInstructions?apiKey=${spoonacularAPIKEY}`
+    )
+    res.send(data)
+  } catch (error) {
+    next(error)
+  }
+})
+
 router.get('/:userId', async (req, res, next) => {
   try {
     const user = await User.getFridgeId(req.params.userId)
