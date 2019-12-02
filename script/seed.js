@@ -33,15 +33,39 @@ async function seed() {
     }),
     Item.create({
       name: 'Arugula',
-      serialNum: 11111
+      serialNum: 11111,
+      imageUrl:
+        'https://static.openfoodfacts.org/images/products/078/970/772/0052/front_en.3.400.jpg'
     }),
     Item.create({
       name: 'Granny Smith Apple',
-      serialNum: 22222
+      serialNum: 22222,
+      imageUrl:
+        'https://static.openfoodfacts.org/images/products/003/582/608/6433/front_en.3.400.jpg'
     }),
     Item.create({
       name: 'Cilantro',
-      serialNum: 33333
+      serialNum: 33333,
+      imageUrl:
+        'https://static.openfoodfacts.org/images/products/842/309/800/0363/front_es.6.400.jpg'
+    }),
+    Item.create({
+      name: 'Chicken',
+      serialNum: 55555,
+      imageUrl:
+        'https://static.openfoodfacts.org/images/products/009/661/982/8616/front_en.3.400.jpg'
+    }),
+    Item.create({
+      name: 'Beef',
+      serialNum: 121212,
+      imageUrl:
+        'https://static.openfoodfacts.org/images/products/325/039/002/1001/front_fr.11.400.jpg'
+    }),
+    Item.create({
+      name: 'Sriracha',
+      serialNum: 1234567,
+      imageUrl:
+        'https://static.openfoodfacts.org/images/products/002/446/306/1163/front_en.9.400.jpg'
     })
   ])
 
@@ -61,6 +85,26 @@ async function seed() {
     FridgeStock.create({
       fridgeId: 2,
       itemId: 3
+    }),
+    FridgeStock.create({
+      fridgeId: 2,
+      itemId: 4,
+      expirationDate: new Date(2019, 11, 31)
+    }),
+    FridgeStock.create({
+      fridgeId: 2,
+      itemId: 5,
+      expirationDate: new Date(2019, 11, 31)
+    }),
+    FridgeStock.create({
+      fridgeId: 2,
+      itemId: 6,
+      expirationDate: new Date(2019, 11, 31)
+    }),
+    FridgeStock.create({
+      fridgeId: 2,
+      itemId: 7,
+      expirationDate: new Date(2019, 11, 30)
     })
   ])
 
