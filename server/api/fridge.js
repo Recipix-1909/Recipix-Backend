@@ -32,6 +32,37 @@ router.get('/:userId', async (req, res, next) => {
   }
 })
 
+router.post('/:userId/manual', async (req, res, next) => {
+  try {
+    const user = await User.getFridgeId(req.params.userId)
+    const fridgeId = user.fridgeId
+
+    const itemId = await Item.findOrCreate({
+      where: {
+        name: req.body.name
+      }
+    })
+    const item = itemId[0]
+
+    let fridge = await FridgeStock.findOrCreate({
+      where: {
+        itemId: item.id,
+        fridgeId: fridgeId
+      }
+    })
+
+    const fridgeItem = fridge[0]
+    if (req.body.expirationDate) {
+      fridgeItem.expirationDate = req.body.expirationDate
+      fridgeItem.save()
+    }
+
+    res.send({fridgeItem, item})
+  } catch (error) {
+    next(error)
+  }
+})
+
 router.post('/:userId', async (req, res, next) => {
   // req.body should be like:
   /* {
