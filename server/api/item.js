@@ -21,8 +21,8 @@ router.post('/add', async (req, res, next) => {
     const item = await Item.findOrCreate({
       where: {
         name: req.body.name,
-        imageUrl: req.body.imageUrl,
-        serialNum: req.body.serialNum
+        imageUrl: req.body.imageUrl || null,
+        serialNum: req.body.serialNum || null
       }
     })
     res.send(item)
