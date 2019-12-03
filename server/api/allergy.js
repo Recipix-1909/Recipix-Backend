@@ -26,12 +26,12 @@ router.post('/:userId', async (req, res, next) => {
   }
 })
 
+// DELETE an allergy from a specific user
 router.delete('/:userId', async (req, res, next) => {
   try {
     const user = await User.findByPk(req.params.userId)
     const deletedAllergy = {allergyId: req.body.allergyId}
     await user.removeAllergy(req.body.allergyId)
-    console.log('deletedAllergy ===', deletedAllergy)
     res.send(deletedAllergy)
   } catch (error) {
     next(error)
