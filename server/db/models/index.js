@@ -3,6 +3,8 @@ const Item = require('./item')
 const Fridge = require('./fridge')
 const FridgeStock = require('./fridgeStock')
 const Recipe = require('./recipes')
+const Allergy = require('./allergy')
+const Diet = require('./diet')
 
 /**
  * If we had any associations to make, this would be a great place to put them!
@@ -23,10 +25,16 @@ User.belongsToMany(Recipe, {through: 'savedRecipe'})
 Recipe.belongsToMany(User, {through: 'savedRecipe'})
 Item.belongsToMany(Fridge, {through: FridgeStock})
 Fridge.belongsToMany(Item, {through: FridgeStock})
+User.belongsToMany(Allergy, {through: 'UserAllergy'})
+Allergy.belongsToMany(User, {through: 'UserAllergy'})
+User.belongsToMany(Diet, {through: 'UserDiet'})
+Diet.belongsToMany(User, {through: 'UserDiet'})
 
 module.exports = {
   User,
   Item,
   Fridge,
-  FridgeStock
+  FridgeStock,
+  Allergy,
+  Diet
 }
