@@ -6,6 +6,7 @@ module.exports = router
 // GET a specific user's allergies
 router.get('/:userId', async (req, res, next) => {
   try {
+    console.log('FFFFFFFFFFFFFFFFFFFFFF')
     const user = await User.findByPk(req.params.userId)
     const allergies = await user.getAllergies()
     res.send(allergies)
