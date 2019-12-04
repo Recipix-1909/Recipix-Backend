@@ -1,13 +1,96 @@
 'use strict'
 
 const db = require('../server/db')
-const {User, Fridge, Item, FridgeStock} = require('../server/db/models')
+const {
+  User,
+  Fridge,
+  Item,
+  FridgeStock,
+  Allergy,
+  Diet
+} = require('../server/db/models')
 
 async function seed() {
   await db.sync({force: true})
   console.log('db synced!')
 
-  const fridges = await Promise.all([Fridge.create({}), Fridge.create({})])
+  const allergies = await Promise.all([
+    Allergy.create({
+      name: 'Dairy'
+    }),
+    Allergy.create({
+      name: 'Egg'
+    }),
+    Allergy.create({
+      name: 'Gluten'
+    }),
+    Allergy.create({
+      name: 'Grain'
+    }),
+    Allergy.create({
+      name: 'Peanut'
+    }),
+    Allergy.create({
+      name: 'Seafood'
+    }),
+    Allergy.create({
+      name: 'Sesame'
+    }),
+    Allergy.create({
+      name: 'Shellfish'
+    }),
+    Allergy.create({
+      name: 'Soy'
+    }),
+    Allergy.create({
+      name: 'Sulfite'
+    }),
+    Allergy.create({
+      name: 'Tree Nut'
+    }),
+    Allergy.create({
+      name: 'Wheat'
+    })
+  ])
+
+  const diets = await Promise.all([
+    Diet.create({
+      name: 'Gluten Free'
+    }),
+    Diet.create({
+      name: 'Ketogenic'
+    }),
+    Diet.create({
+      name: 'Vegetarian'
+    }),
+    Diet.create({
+      name: 'Lacto-Vegetarian'
+    }),
+    Diet.create({
+      name: 'Ovo-Vegetarian'
+    }),
+    Diet.create({
+      name: 'Vegan'
+    }),
+    Diet.create({
+      name: 'Pescatarian'
+    }),
+    Diet.create({
+      name: 'Paleo'
+    }),
+    Diet.create({
+      name: 'Primal'
+    }),
+    Diet.create({
+      name: 'Whole30'
+    })
+  ])
+
+  const fridges = await Promise.all([
+    Fridge.create({}),
+    Fridge.create({}),
+    Fridge.create({})
+  ])
 
   const users = await Promise.all([
     User.create({
@@ -23,8 +106,19 @@ async function seed() {
       email: 'lilybmoriarty@gmail.com',
       password: 'password',
       fridgeId: 2
+    }),
+    User.create({
+      firstName: 'a',
+      lastName: 'a',
+      email: 'a@a.a',
+      password: 'a',
+      fridgeId: 3
     })
   ])
+
+  const userA = await User.findOne({where: {fridgeId: 3}})
+  userA.addAllergies([1, 3])
+  userA.addDiets([3, 6])
 
   const items = await Promise.all([
     Item.create({
@@ -105,13 +199,43 @@ async function seed() {
       fridgeId: 2,
       itemId: 7,
       expirationDate: new Date(2019, 11, 30)
+    }),
+    FridgeStock.create({
+      fridgeId: 3,
+      itemId: 2
+    }),
+    FridgeStock.create({
+      fridgeId: 3,
+      itemId: 3
+    }),
+    FridgeStock.create({
+      fridgeId: 3,
+      itemId: 4,
+      expirationDate: new Date(2019, 11, 31)
+    }),
+    FridgeStock.create({
+      fridgeId: 3,
+      itemId: 5,
+      expirationDate: new Date(2019, 11, 31)
+    }),
+    FridgeStock.create({
+      fridgeId: 3,
+      itemId: 6,
+      expirationDate: new Date(2019, 11, 31)
+    }),
+    FridgeStock.create({
+      fridgeId: 3,
+      itemId: 7,
+      expirationDate: new Date(2019, 11, 30)
     })
   ])
 
   console.log(
     `seeded ${users.length} users, ${fridges.length} fridges, ${
       items.length
-    } items, ${fridgeStock.length} items in fridge!`
+    } items, ${allergies.length} allergies, ${diets.length} diets, ${
+      fridgeStock.length
+    } items in fridge!`
   )
   console.log(`seeded successfully`)
 }
