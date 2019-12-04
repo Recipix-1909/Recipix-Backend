@@ -25,7 +25,9 @@ router.post('/add', async (req, res, next) => {
         serialNum: req.body.serialNum || null
       }
     })
-    res.send(item)
+    // this isn't working
+    if (!item) res.send({item: null})
+    else res.send(item)
   } catch (error) {
     next(error)
   }
