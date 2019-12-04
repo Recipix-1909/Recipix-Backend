@@ -3,6 +3,16 @@ const {Fridge, FridgeStock, User, Item, Diet} = require('../db/models')
 const Sequelize = require('sequelize')
 module.exports = router
 
+// GET all diets
+router.get('/', async (req, res, next) => {
+  try {
+    const allDiets = await Diet.findAll()
+    res.send(allDiets)
+  } catch (error) {
+    next(error)
+  }
+})
+
 // GET a specific user's diet
 router.get('/:userId', async (req, res, next) => {
   try {
@@ -17,10 +27,14 @@ router.get('/:userId', async (req, res, next) => {
 // POST a new diet to a specific user
 router.post('/:userId', async (req, res, next) => {
   try {
-    const user = await User.findByPk(req.params.userId)
-    const newDiet = await user.addDiet(req.body.dietId)
-    // console.log(newDiet)
-    res.send(newDiet)
+    const diet = await Diet.findByPk(req.body.dietId)
+    if (!diet) {
+      res.status(404).send('Diet does not exist')
+    } else {
+      const user = await User.findByPk(req.params.userId)
+      await user.addDiet(diet.id)
+      res.send(diet)
+    }
   } catch (error) {
     next(error)
   }
