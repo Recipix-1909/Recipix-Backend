@@ -76,6 +76,7 @@ router.post('/:userId', async (req, res, next) => {
     const user = await User.getFridgeId(req.params.userId)
     const fridgeId = user.fridgeId
 
+    console.log('ABLE TO GO INTO THIS IF STATEMENT TO DO SOMETHING!!!!!!!!!!!!')
     const item = await Item.getItem(req.body.serialNum)
 
     // expiration date needs to be in ISO formate, i.e. 30.04.2020 for 4/30/20
@@ -98,7 +99,7 @@ router.post('/:userId', async (req, res, next) => {
 
     res.status(202).send({fridgeItem, item})
   } catch (error) {
-    next(error)
+    res.status(204).send({item: 'error', error})
   }
 })
 
