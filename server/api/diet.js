@@ -27,6 +27,7 @@ router.get('/:userId', async (req, res, next) => {
 // POST a new diet to a specific user
 router.post('/:userId', async (req, res, next) => {
   try {
+    //maybe find by name instead of id
     const diet = await Diet.findByPk(req.body.dietId)
     if (!diet) {
       res.status(404).send('Diet does not exist')
