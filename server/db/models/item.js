@@ -1,8 +1,8 @@
 const Sequelize = require('sequelize')
 const db = require('../db')
-// NEED TO REMOVE OR YOU'RE FIRED
-const edamamFoodAPIID = '37b35021'
-const edamamFoodAPIKEY = '9e2da62ea38257ecb31bcc95678117ff'
+const edamamFoodAPIID = process.env.edamamFoodAPIID
+const edamamFoodAPIKEY = process.env.edamamFoodAPIKEY
+
 const axios = require('axios')
 
 const Item = db.define('item', {

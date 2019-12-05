@@ -1,10 +1,7 @@
 const axios = require('axios')
 const {Fridge, User, Item} = require('../db/models')
-const {
-  edamamRecipeAPIKEY,
-  edamamRecipeAPIID,
-  spoonacularAPIKEY
-} = require('../../secrets')
+const spoonacularAPIKEY = process.env.spoonacularAPIKEY
+
 const router = require('express').Router()
 
 const getRecipes = async itemsArray => {
