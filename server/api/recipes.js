@@ -26,7 +26,7 @@ const getRecipes = async itemsArray => {
 
 router.get('/singleRecipe/:recipeId', async (req, res, next) => {
   try {
-    console.log('this is req.params ----------------->', req.params)
+    // console.log('this is req.params ----------------->', req.params)
     const {data} = await axios.get(
       `https://api.spoonacular.com/recipes/${
         req.params.recipeId
@@ -40,7 +40,7 @@ router.get('/singleRecipe/:recipeId', async (req, res, next) => {
 
 router.get('/:userId', async (req, res, next) => {
   try {
-    console.log(req.user.id)
+    console.log('REQ.USER.ID@@@@@@', req.user.id)
     const user = await User.getFridgeId(req.params.userId)
     const fridgeItems = await Fridge.findOne({
       where: {
@@ -63,7 +63,7 @@ router.get('/:userId', async (req, res, next) => {
 // Updating list of recipes based off of user's filtered ingredients
 router.put('/filtered', async (req, res, next) => {
   try {
-    console.log(req.user.id)
+    console.log('=========>', req.user.id)
     const filteredItems = req.body
     let recipes = await getRecipes(filteredItems)
     res.send(recipes)
