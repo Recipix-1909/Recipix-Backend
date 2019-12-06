@@ -4,23 +4,37 @@ const spoonacularAPIKEY = process.env.spoonacularAPIKEY
 
 const router = require('express').Router()
 
-const getRecipes = async itemsArray => {
-  // const diets = await Diet.findByPk(req.body.userId)
+const getRecipes = async (itemsArray, userId) => {
+  const user = await User.findByPk(userId)
+  const diets = await user.getDiets()
+  const allergies = await user.getAllergies()
 
-  let searchString = ''
+  let searchIngredientsString = ''
   itemsArray.forEach(currentItem => {
     currentItem = currentItem.name.split(' ').join('+')
-    searchString += currentItem + ',+'
+    searchIngredientsString += currentItem + ',+'
   })
-  searchString = searchString.slice(0, -2)
-  console.log(searchString)
+  searchIngredientsString = searchIngredientsString.slice(0, -2)
 
-  // let diet ='';
+  let dietSearchString = ''
+  diets.forEach(currentDiet => {
+    currentDiet = currentDiet.name.split(' ').join('')
+    dietSearchString += currentDiet + ',+'
+  })
+  dietSearchString = dietSearchString.slice(0, -2)
+
+  let allergySearchString = ''
+  allergies.forEach(currentAllergies => {
+    currentAllergies = currentAllergies.name.split(' ').join('')
+    allergySearchString += currentAllergies + ',+'
+  })
+  allergySearchString = allergySearchString.slice(0, -2)
 
   // make API call to retrieve recipes from user's ingredients
   const {data} = await axios.get(
-    `https://api.spoonacular.com/recipes/findByIngredients?ingredients=${searchString}&number=5&apiKey=${spoonacularAPIKEY}`
+    `https://api.spoonacular.com/recipes/complexSearch?includeIngredients=${searchIngredientsString}&diet=${dietSearchString}&intolerances=${allergySearchString}number=5&apiKey=${spoonacularAPIKEY}`
   )
+
   return data
 }
 
@@ -40,7 +54,6 @@ router.get('/singleRecipe/:recipeId', async (req, res, next) => {
 
 router.get('/:userId', async (req, res, next) => {
   try {
-    console.log('REQ.USER.ID@@@@@@', req.user.id)
     const user = await User.getFridgeId(req.params.userId)
     const fridgeItems = await Fridge.findOne({
       where: {
@@ -53,7 +66,7 @@ router.get('/:userId', async (req, res, next) => {
       ]
     })
     const items = fridgeItems.items
-    let recipes = await getRecipes(items)
+    let recipes = await getRecipes(items, req.user.id)
     res.send(recipes)
   } catch (error) {
     next(error)
@@ -63,9 +76,8 @@ router.get('/:userId', async (req, res, next) => {
 // Updating list of recipes based off of user's filtered ingredients
 router.put('/filtered', async (req, res, next) => {
   try {
-    console.log('=========>', req.user.id)
     const filteredItems = req.body
-    let recipes = await getRecipes(filteredItems)
+    let recipes = await getRecipes(filteredItems, req.user.id)
     res.send(recipes)
   } catch (error) {
     next(error)
