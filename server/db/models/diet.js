@@ -9,3 +9,5 @@ const Diet = db.define('diet', {
 })
 
 module.exports = Diet
+
+//diet validations

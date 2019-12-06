@@ -27,6 +27,7 @@ router.get('/:userId', async (req, res, next) => {
 // POST a new diet to a specific user
 router.post('/:userId', async (req, res, next) => {
   try {
+    //maybe find by name instead of id
     const diet = await Diet.findByPk(req.body.dietId)
     if (!diet) {
       res.status(404).send('Diet does not exist')
@@ -41,12 +42,16 @@ router.post('/:userId', async (req, res, next) => {
 })
 
 // DELETE a diet from a specific user
-router.delete('/:userId', async (req, res, next) => {
+router.delete('/:userId/:dietId', async (req, res, next) => {
   try {
-    const user = await User.findByPk(req.params.userId)
-    const deleteDiet = {dietId: req.body.dietId}
-    await user.removeDiet(req.body.dietId)
-    res.send(deleteDiet)
+    const deletedDiet = await Diet.findByPk(req.params.dietId)
+    if (!deletedDiet) {
+      res.status(404).send('Diet does not exist')
+    } else {
+      const user = await User.findByPk(req.params.userId)
+      await user.removeDiet(deletedDiet.id)
+      res.send(deletedDiet)
+    }
   } catch (error) {
     next(error)
   }
