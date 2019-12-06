@@ -32,11 +32,11 @@ const getRecipes = async (itemsArray, userId) => {
 
   // make API call to retrieve recipes from user's ingredients
   const {data} = await axios.get(
-    `https://api.spoonacular.com/recipes/complexSearch?includeIngredients=${searchIngredientsString}&diet=${dietSearchString}&intolerances=${allergySearchString}number=5&apiKey=${spoonacularAPIKEY}`
+    `https://api.spoonacular.com/recipes/complexSearch?includeIngredients=${searchIngredientsString}&diet=${dietSearchString}&intolerances=${allergySearchString}&number=5&apiKey=${spoonacularAPIKEY}`
   )
   console.log(
     'HTTP STRING====>',
-    `https://api.spoonacular.com/recipes/complexSearch?includeIngredients=${searchIngredientsString}&diet=${dietSearchString}&intolerances=${allergySearchString}number=5&apiKey=${spoonacularAPIKEY}`
+    `https://api.spoonacular.com/recipes/complexSearch?includeIngredients=${searchIngredientsString}&diet=${dietSearchString}&intolerances=${allergySearchString}&number=5&apiKey=${spoonacularAPIKEY}`
   )
   return data
 }
