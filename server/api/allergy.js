@@ -18,6 +18,7 @@ router.get('/:userId', async (req, res, next) => {
   try {
     const user = await User.findByPk(req.params.userId)
     const allergies = await user.getAllergies()
+    console.log('allergies from get route===>', allergies)
     res.send(allergies)
   } catch (error) {
     next(error)
@@ -32,6 +33,7 @@ router.post('/:userId', async (req, res, next) => {
       res.status(404).send('Allergy does not exist')
     } else {
       const user = await User.findByPk(req.params.userId)
+      console.log('allergy from post route====>', allergy)
       await user.addAllergy(allergy.id)
       res.send(allergy)
     }
