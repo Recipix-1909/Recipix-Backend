@@ -5,6 +5,8 @@ const spoonacularAPIKEY = process.env.spoonacularAPIKEY
 const router = require('express').Router()
 
 const getRecipes = async itemsArray => {
+  // const diets = await Diet.findByPk(req.body.userId)
+
   let searchString = ''
   itemsArray.forEach(currentItem => {
     currentItem = currentItem.name.split(' ').join('+')
@@ -13,13 +15,12 @@ const getRecipes = async itemsArray => {
   searchString = searchString.slice(0, -2)
   console.log(searchString)
 
+  // let diet ='';
+
   // make API call to retrieve recipes from user's ingredients
   const {data} = await axios.get(
     `https://api.spoonacular.com/recipes/findByIngredients?ingredients=${searchString}&number=5&apiKey=${spoonacularAPIKEY}`
   )
-
-  // `https://api.edamam.com/search?q=${searchString}&app_id=${edamamRecipeAPIID}&app_key=${edamamRecipeAPIKEY}&from=0&to=5`
-  // console.log('DATA RETURNED FROM SPOONACULAR ====>', data)
   return data
 }
 
@@ -39,6 +40,7 @@ router.get('/singleRecipe/:recipeId', async (req, res, next) => {
 
 router.get('/:userId', async (req, res, next) => {
   try {
+    console.log(req.user.id)
     const user = await User.getFridgeId(req.params.userId)
     const fridgeItems = await Fridge.findOne({
       where: {
@@ -61,6 +63,7 @@ router.get('/:userId', async (req, res, next) => {
 // Updating list of recipes based off of user's filtered ingredients
 router.put('/filtered', async (req, res, next) => {
   try {
+    console.log(req.user.id)
     const filteredItems = req.body
     let recipes = await getRecipes(filteredItems)
     res.send(recipes)
