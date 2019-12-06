@@ -12,9 +12,9 @@ const getRecipes = async (itemsArray, userId) => {
   let searchIngredientsString = ''
   itemsArray.forEach(currentItem => {
     currentItem = currentItem.name.split(' ').join('+')
-    searchIngredientsString += currentItem + ',+'
+    searchIngredientsString += currentItem + ','
   })
-  searchIngredientsString = searchIngredientsString.slice(0, -2)
+  searchIngredientsString = searchIngredientsString.slice(0, -1)
 
   let dietSearchString = ''
   diets.forEach(currentDiet => {
