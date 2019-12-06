@@ -4,46 +4,28 @@ const spoonacularAPIKEY = process.env.spoonacularAPIKEY
 
 const router = require('express').Router()
 
-const getRecipes = async (itemsArray, userId) => {
-  const user = await User.findByPk(userId)
-  const diets = await user.getDiets()
-  const allergies = await user.getAllergies()
-
-  let searchIngredientsString = ''
+const getRecipes = async itemsArray => {
+  let searchString = ''
   itemsArray.forEach(currentItem => {
     currentItem = currentItem.name.split(' ').join('+')
-    searchIngredientsString += currentItem + ','
+    searchString += currentItem + ',+'
   })
-  searchIngredientsString = searchIngredientsString.slice(0, -1)
-
-  let dietSearchString = ''
-  diets.forEach(currentDiet => {
-    currentDiet = currentDiet.name.split(' ').join('')
-    dietSearchString += currentDiet + ',+'
-  })
-  dietSearchString = dietSearchString.slice(0, -2)
-
-  let allergySearchString = ''
-  allergies.forEach(currentAllergies => {
-    currentAllergies = currentAllergies.name.split(' ').join('')
-    allergySearchString += currentAllergies + ',+'
-  })
-  allergySearchString = allergySearchString.slice(0, -2)
+  searchString = searchString.slice(0, -2)
+  console.log(searchString)
 
   // make API call to retrieve recipes from user's ingredients
   const {data} = await axios.get(
-    `https://api.spoonacular.com/recipes/complexSearch?includeIngredients=${searchIngredientsString}&diet=${dietSearchString}&intolerances=${allergySearchString}&number=5&apiKey=${spoonacularAPIKEY}`
+    `https://api.spoonacular.com/recipes/findByIngredients?ingredients=${searchString}&number=5&apiKey=${spoonacularAPIKEY}`
   )
-  console.log(
-    'HTTP STRING====>',
-    `https://api.spoonacular.com/recipes/complexSearch?includeIngredients=${searchIngredientsString}&diet=${dietSearchString}&intolerances=${allergySearchString}&number=5&apiKey=${spoonacularAPIKEY}`
-  )
+
+  // `https://api.edamam.com/search?q=${searchString}&app_id=${edamamRecipeAPIID}&app_key=${edamamRecipeAPIKEY}&from=0&to=5`
+  // console.log('DATA RETURNED FROM SPOONACULAR ====>', data)
   return data
 }
 
 router.get('/singleRecipe/:recipeId', async (req, res, next) => {
   try {
-    // console.log('this is req.params ----------------->', req.params)
+    console.log('this is req.params ----------------->', req.params)
     const {data} = await axios.get(
       `https://api.spoonacular.com/recipes/${
         req.params.recipeId
@@ -69,7 +51,7 @@ router.get('/:userId', async (req, res, next) => {
       ]
     })
     const items = fridgeItems.items
-    let recipes = await getRecipes(items, req.user.id)
+    let recipes = await getRecipes(items)
     res.send(recipes)
   } catch (error) {
     next(error)
@@ -80,7 +62,7 @@ router.get('/:userId', async (req, res, next) => {
 router.put('/filtered', async (req, res, next) => {
   try {
     const filteredItems = req.body
-    let recipes = await getRecipes(filteredItems, req.user.id)
+    let recipes = await getRecipes(filteredItems)
     res.send(recipes)
   } catch (error) {
     next(error)
